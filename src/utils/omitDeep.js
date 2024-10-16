@@ -14,7 +14,7 @@ import { transform, isObject } from 'lodash';
 // @params - keys: Array/String - string or array of strings of keys to remove
 const omitDeep = (object, keys) => {
 
-  const omitFromObject = (o: any) => { // the inner function which will be called recursivley
+  const omitFromObject = (o) => { // the inner function which will be called recursivley
 
     return transform(o, (result, value, key) => { // transform to a new object
 

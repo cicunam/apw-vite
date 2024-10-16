@@ -4,7 +4,7 @@
 // Raúl Salinas <raul.teo.salinas@cic.unam.mx>
 
 import { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // Implementación del mecanismo
 const useOrganizer = (defaultPath, levelSubroute) => { 
@@ -12,7 +12,7 @@ const useOrganizer = (defaultPath, levelSubroute) => {
   // Ej. personas/13244/componenteOrganizador levelSubroute será 3.
 
   // Mecanismos del enrutador
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Estado del mecanismo
   const [currentTab, setCurrentTab] = useState(defaultPath);
@@ -35,7 +35,7 @@ const useOrganizer = (defaultPath, levelSubroute) => {
       setIsFirstLoad(false)
     }
 
-    history.replace(currentPage + currentTab);
+    navigate(currentPage + currentTab, { replace: true });
 
 
   }, [ currentTab ]); // eslint-disable-line
