@@ -32,7 +32,7 @@ const Login = () => {
   return (
     <div className={style.container}>
       <div className={style.columnProductInfo} style={{padding:'24px'}}>
-          <Image src="/images/logo-primary.png" size="medium" width="50%"/>
+          <Image src="src/assets/cic-logo-primary.png" size="medium" width="50%"/>
           <Title style={{textAlign: "center"}} color="white" size="large" >{context && context.product.name}</Title>
       </div>
       <div className={style.columnLoginForm}>

@@ -13,7 +13,7 @@ import { setContext as apolloSetContext } from '@apollo/client/link/context';
 import { set } from 'lodash';
 
 // Variables de diseño (Tokens)
-import '@cicunam/sd/style.css';
+import '@cicunam/sd/styles';
 
 // Configuración
 import config from './config.json';

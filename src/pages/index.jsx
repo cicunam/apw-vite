@@ -9,8 +9,8 @@
 
 // [lock:plantilla]
 
-import React, { useEffect } from 'react';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 
 // Componentes del sistema de diseño
 import {
@@ -34,7 +34,7 @@ const Template = props => {
   useWindow('main');
 
   // Información del enrutador
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   // Contexto de la aplicación
@@ -47,7 +47,7 @@ const Template = props => {
     setContext({ key: 'currentPage', value: context.pages[index] });
 
     // Cambiar la ruta
-    history.replace(route);
+    navigate(route, { replace: true });
 
   }
 
@@ -99,33 +99,39 @@ const Template = props => {
               <Title size="medium">{context.currentPage.summary}</Title>
             </Flexbox>
           </Box>
-          <Switch>
+          <Routes>
             { // eslint-disable-next-line
               context.pages.map((page, i) => {
                 if (page.components.includes("Detail")) {
-                  let DynamicComponent = require('./' + page.module + '/Detail').default;
-                  return <Route key={i} path={page.route + '/:id'} render={() => <DynamicComponent />} />
+                  // let DynamicComponent = require('./' + page.module + '/Detail').default;
+                  // return <Route key={i} path={page.route + '/:id'} render={() => <DynamicComponent />} />
+                  let DynComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Detail`));
+                  return <Route key={i} path={`${page.route}/:id`} element={<Suspense><DynComponent id={i} /></Suspense>}/>
                 }
               })}
             { // eslint-disable-next-line
               context.pages.map((page, i) => {
                 if (page.components.includes("Overview")) {
-                  let DynamicComponent = require('./' + page.module + '/Overview').default;
-                  return <Route key={i} path={page.route} render={() => <DynamicComponent />} />
+                  // let DynamicComponent = require('./' + page.module + '/Overview').default;
+                  // return <Route key={i} path={page.route} render={() => <DynamicComponent />} />
+                  let DynComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Overview`));
+                  return <Route key={i} path={`${page.route}`} element={<Suspense><DynComponent /></Suspense>}/>
                 }
               })}
-          </Switch>
+          </Routes>
         </main>
         <Aside color="secondary" style={{ maxWidth: '20%' }}>
-          <Switch>
+          <Routes>
             { // eslint-disable-next-line
               context.pages.map((page, i) => {
                 if (page.components.includes("Info")) {
-                  let DynamicComponent = require('./' + page.module + '/Info').default;
-                  return <Route key={i} path={page.route} render={() => <DynamicComponent />} />
+                  // let DynamicComponent = require('./' + page.module + '/Info').default;
+                  // return <Route key={i} path={page.route} render={() => <DynamicComponent />} />
+                  let DynComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Info`));
+                  return <Route key={i} path={`${page.route}`} element={<Suspense><DynComponent /></Suspense>}/>
                 }
               })}
-          </Switch>
+          </Routes>
         </Aside>
       </div>
     </>

@@ -4,7 +4,7 @@
 // José Esteva <josesteva@cic.unam.mx>
 
 import React from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 // import { VariableType } from 'json-to-graphql-query';
 // Componentes
@@ -111,7 +111,7 @@ const Detail = props => {
           { !form.isDisabled && <Button icon="check" color="primary" onClick={form.handleAccept}/> }
         </Actions>
       </Flexbox>
-      <Switch>
+      <Routes>
         <Route path={organizer.currentPage + '/general'}>
           <Box space="medium large">
             <Flexbox direction="column" align="center" style={{ margin:'auto', maxWidth:'960px' }}>
@@ -139,7 +139,7 @@ const Detail = props => {
             <Subdata collection={subdata.collection} items={subdata.items} onAddItem={subdata.addItem} onDeleteItem={subdata.deleteItem} disabled={form.isDisabled}/>
           </Box>
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 
