@@ -12,7 +12,7 @@ import { onError } from "@apollo/client/link/error";
 import { setContext as apolloSetContext } from '@apollo/client/link/context';
 import { set } from 'lodash';
 
-// Variables de diseño (Tokens)
+// Estilos globales
 import '@cicunam/sd/styles';
 
 // Configuración

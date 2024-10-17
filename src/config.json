@@ -14,6 +14,17 @@
   },
   "pages": [
     {
+      "icon": "home",
+      "label": "Inicio",
+      "summary": "Página de inicio",
+      "module" : "Inicio",
+      "components": ["Overview"],
+      "route": "/",
+      "filter": {},
+      "page": 0,
+      "item": false
+    },
+    {
       "icon": "user",
       "label": "Personas",
       "summary": "Lista de usuarios",
@@ -43,6 +54,6 @@
     "filter": {},
     "page": 1
   },
-  "window": { "width": 0, "height": 0, "cards": 0 },
+  "window": { "width": 0, "height": 0, "cards": 12 },
   "isLoggedIn": false
 }

@@ -13,8 +13,10 @@ import useContext from './context';
 // Definición del mecanismo
 const useWindow = selector => {
 
+  // [ width, setWidth ] = useState(0);
+
   // Contexto de la aplicación
-  const { setContext } = useContext();
+  const { context, setContext } = useContext();
 
   // Crear un observador del tamaño del elemento (selector).
   useEffect(() => {
@@ -28,24 +30,31 @@ const useWindow = selector => {
       // Calcular el número de tarjetas que caben en la ventana
       // let cards = Math.floor(((element.clientWidth - 32) / 312) * 4); // NOTA: 64 = Espacio derecho e izquierdo; 312 = Ancho de la tarjeta + Espacio entre tarjetas; 4 = Número de renglones
 
-      // TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL
-      let cards;
-      if (element.clientWidth >= 1920) cards = 18;
-      else if (element.clientWidth >= 1600) cards = 15;
-      else if (element.clientWidth >= 1280) cards = 12;
-      else if (element.clientWidth >= 960) cards = 9;
-      else if (element.clientWidth >= 640) cards = 6;
-      // TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL
+      console.log(context.window.width, element.clientWidth)
 
-      setContext({ key: 'window', value: { width: element.clientWidth, height: element.clientHeight, cards } });
+      // Sólo cambiar el contexto si el cambio de tamañ es de +- 10 pixeles; de lo contrario la pantalla "vibra".
+      if (element.clientWidth > 0 && (element.clientWidth > context.window.width + 10 || element.clientWidth < context.window.width - 10 )) {
+
+        // TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL
+        let cards;
+        if (element.clientWidth >= 1920) cards = 18;
+        else if (element.clientWidth >= 1600) cards = 15;
+        else if (element.clientWidth >= 1280) cards = 12;
+        else if (element.clientWidth >= 960) cards = 9;
+        else if (element.clientWidth >= 640) cards = 6;
+        // TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL TEMPORAL
+
+        setContext({ key: 'window', value: { width: element.clientWidth, height: element.clientHeight, cards } });
+
+      }
 
     }
 
-    // Obtener tamaño inicial
-    handleResize();
-
     // Observar cambios en el tamaño del elemento
     new ResizeObserver(handleResize).observe(element);
+
+        // // Obtener tamaño inicial
+        // handleResize();
 
   }, []); // eslint-disable-line
 

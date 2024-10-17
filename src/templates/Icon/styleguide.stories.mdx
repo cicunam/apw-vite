@@ -1,0 +1,62 @@
+<!--
+  SD
+  Documentación
+  Icon (Ícono)
+-->
+
+import { Meta, Canvas, Story, ArgsTable } from '@storybook/addon-docs';
+import { withDesign } from 'storybook-addon-designs';
+
+import Icon from './index';
+
+<Meta
+  title="Átomos/Icon"
+  component={Icon}
+  decorators={[ withDesign ]}
+/>
+
+# Icon (Ícono)
+
+Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur qui ut
+beatae nam molestiae cum doloremque fugit nihil, vitae modi recusandae culpa
+odit facere eum vel reiciendis eius repellat, totam aperiam. Molestiae error
+voluptatibus et neque vel libero, harum nam quibusdam mollitia, sapiente rerum
+iste modi sit deserunt? Officiis, quaerat!
+
+<Canvas>
+  <Story
+    name="Componente"
+    parameters={{ design: { type: 'figma', url: 'https://www.figma.com/file/tyBKC7ndaq3XNOCERB1q8H/Componentes?node-id=2159%3A1195' }}}
+    argTypes={{
+      type: {
+        name: 'type',
+        type: { name: 'string', required: true },
+        description: 'Tipo de ícono',
+        control: 'text'
+      },
+      color: {
+        name: 'color',
+        type: { name: 'string', required: false },
+        description: 'Color del ícono',
+        control: 'select',
+        options: ['black','primary','secondary','neutral','white']
+      },
+      size: {
+        name: 'size',
+        type: { name: 'string', required: false },
+        description: 'Tamaño del ícono',
+        control: 'select',
+        options: ['huge','large','medium','small','tiny']
+      }
+    }}
+    args = {{
+      type: 'info-circle',
+      color: 'black',
+      size: 'medium'
+    }}
+  >
+    {(args) => <Icon {...args} />}
+  </Story>
+</Canvas>
+
+<ArgsTable story='Componente' />

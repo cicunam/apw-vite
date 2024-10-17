@@ -31,7 +31,7 @@ import useWindow from '../hooks/window';
 const Template = props => {
 
   // Observar cambios en el tamaño del área de trabajo
-  useWindow('main');
+  // useWindow('main');
 
   // Información del enrutador
   const navigate = useNavigate();

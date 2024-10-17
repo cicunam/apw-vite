@@ -1,0 +1,58 @@
+/*
+  SD
+  Estilos
+  Icon (Ícono)
+*/
+
+/* General */
+
+.icon {
+
+  height: 1em;
+  width: 1em;
+
+}
+
+/* Color */
+
+.black {
+  color: var(--color-black);
+}
+
+.primary {
+  color: var(--color-primary);
+}
+
+.secondary {
+  color: var(--color-secondary);
+}
+
+.neutral {
+  color: var(--color-neutral-dark);
+}
+
+.white {
+  color: var(--color-white);
+}
+
+/* Tamaño */
+
+.tiny {
+  font-size: var(--icon-size-tiny);
+}
+
+.small {
+  font-size: var(--icon-size-small);
+}
+
+.medium {
+  font-size: var(--icon-size-medium);
+}
+
+.large {
+  font-size: var(--icon-size-large);
+}
+
+.huge {
+  font-size: var(--icon-size-huge);
+}
