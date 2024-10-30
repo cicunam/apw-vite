@@ -9,7 +9,7 @@
 
 // [lock:plantilla]
 
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 
 // Componentes del sistema de diseño
@@ -23,6 +23,10 @@ import {
   Title
 } from '@cicunam/sd';
 
+import iHome from '@cicunam/sd/icons/home.svg?react';
+
+
+
 // Mecanismos utilizados
 import useContext from '../hooks/context';
 import useWindow from '../hooks/window';
@@ -33,14 +37,17 @@ const Template = props => {
   // Observar cambios en el tamaño del área de trabajo
   // useWindow('main');
 
-  // Información del enrutador
+  // Enrutador
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Contexto de la aplicación
+  // Contexto
   const { context, setContext } = useContext();
 
-  // Función para cambiar de ruta
+  // Estado
+  const [icons, setIcons] = useState([]);
+
+  // Cambiar de ruta
   const changeRoute = (index, route) => {
 
     // Hacer que la variable currentPage apunte a la página seleccionada
@@ -50,6 +57,45 @@ const Template = props => {
     navigate(route, { replace: true });
 
   }
+
+  // Borrar el token de local storage y del contexto
+  const logout = () => {
+
+    localStorage.removeItem('access_token');
+    setContext({key: 'isLoggedIn', value: false})
+  }
+
+  // Importar los iconos de los módulos
+  useEffect(() => {
+
+    // NO BORRAR: Este código funciona perfectamente bien pero quiero explorar otras opciones  
+    // Promise.all(context.pages.map(async (page) => (await import(`@cicunam/sd/icons/${page.icon}.svg?react`)).default)).then((svgs) => setIcons(svgs));
+
+    (async () => {
+
+      console.log('Ejecuta función anónima...')
+
+      let newIcons = [];
+
+      for (const page of context.pages) {
+
+        console.log('page', page);
+
+        let path = '@cicunam/sd/icons/square.svg?react';
+
+        // let { default:svg } = await import(`@cicunam/sd/icons/${page.icon ?? 'square'}.svg?react`);
+        let { default:svg } = await import('@cicunam/sd/icons/square.svg?react');
+        newIcons.push(svg);
+
+        console.log('svg', svg);
+
+      }
+
+      setIcons(newIcons);
+          
+    })();
+
+  }, []);  // eslint-disable-line
 
   // Actualizar la variable currentPage cada vez que cambie la ruta
   useEffect(() => {
@@ -68,26 +114,24 @@ const Template = props => {
     }
   }, [ location.pathname ]); // eslint-disable-line
 
-  // Borrar el token de local storage y del contexto
-  const logout = () => {
+  console.log('icons', icons);
 
-    localStorage.removeItem('access_token');
-    setContext({key: 'isLoggedIn', value: false})
-  }
+  console.log('iHome', iHome);
 
   // Interfaz gráfica
   return (
 
     <>
-      <Header color="primary" hue="dark"><Title size="medium" color="white">{context && context.product.name}</Title></Header>
+      <Header color="primary" hue="dark"><Title role="h1" size="medium" color="white">{context && context.product.name}</Title></Header>
       <div className="layout">
         <Navigation>
           <Flexbox style={{height: "100%"}} direction="column" justify="between">
           {/*<Menu.Item icon="home" onClick={() => changeRoute("/")}>Inicio</Menu.Item>*/}
           <div>
-          {context.pages.map((page, i) => (
-            <Menu.Item key={i} icon={page.icon} onClick={() => changeRoute(i, page.route)} title={page.label}>{page.label}</Menu.Item>
-          ))}
+          {context.pages.map((page, i) => { 
+            // let DIcon = lazy(() => import(/* @vite-ignore */`@cicunam/sd/icons/star.svg?react`));
+            return (<Suspense><Menu.Item key={i} icon={icons[i]} onClick={() => changeRoute(i, page.route)} title={page.label}>{page.label}</Menu.Item></Suspense>)
+          })}
           </div>
 
           <Menu.Item icon="times" onClick={logout} title="Cerrar la sesión">Cerrar la sesión</Menu.Item>
@@ -101,23 +145,21 @@ const Template = props => {
           </Box>
           <Routes>
             { // eslint-disable-next-line
-              context.pages.map((page, i) => {
-                if (page.components.includes("Detail")) {
-                  // let DynamicComponent = require('./' + page.module + '/Detail').default;
-                  // return <Route key={i} path={page.route + '/:id'} render={() => <DynamicComponent />} />
-                  let DynComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Detail`));
-                  return <Route key={i} path={`${page.route}/:id`} element={<Suspense><DynComponent id={i} /></Suspense>}/>
-                }
-              })}
+            context.pages.map((page, i) => {
+              if (page.components.includes("Detail")) {
+                let DComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Detail`));
+                return <Route key={i} path={`${page.route}/:id`} element={<Suspense><DComponent id={i} /></Suspense>}/>
+              }
+            })}
             { // eslint-disable-next-line
-              context.pages.map((page, i) => {
-                if (page.components.includes("Overview")) {
-                  // let DynamicComponent = require('./' + page.module + '/Overview').default;
-                  // return <Route key={i} path={page.route} render={() => <DynamicComponent />} />
-                  let DynComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Overview`));
-                  return <Route key={i} path={`${page.route}`} element={<Suspense><DynComponent /></Suspense>}/>
-                }
-              })}
+            context.pages.map((page, i) => {
+              if (page.components.includes("Overview")) {
+                // let DynamicComponent = require('./' + page.module + '/Overview').default;
+                // return <Route key={i} path={page.route} render={() => <DynamicComponent />} />
+                let DComponent = lazy(() => import(/* @vite-ignore */`./${page.module}/Overview`));
+                return <Route key={i} path={`${page.route}`} element={<Suspense><DComponent /></Suspense>}/>
+              }
+            })}
           </Routes>
         </main>
         <Aside color="secondary" style={{ maxWidth: '20%' }}>
